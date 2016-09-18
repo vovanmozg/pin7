@@ -3,3 +3,4 @@
 .env
 *.js.map
 Gemfile.lock
+.bundle
