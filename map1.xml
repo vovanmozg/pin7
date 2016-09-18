@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ym:ymaps xmlns:ym="http://maps.yandex.ru/ymaps/1.x" xmlns:gml="http://www.opengis.net/gml" xmlns:repr="http://maps.yandex.ru/representation/1.x"><repr:Representation><repr:View><gml:boundedBy><gml:Envelope><gml:lowerCorner>43.92544 56.289047</gml:lowerCorner><gml:upperCorner>44.074094 56.338445</gml:upperCorner></gml:Envelope></gml:boundedBy></repr:View><repr:Style gml:id="userobject"><repr:iconContentStyle><repr:template>#placemark</repr:template></repr:iconContentStyle><repr:balloonContentStyle><repr:template>#balloon</repr:template></repr:balloonContentStyle></repr:Style><repr:Template gml:id="placemark"><repr:text>$[metaDataProperty.AnyMetaData.number]</repr:text></repr:Template><repr:Template gml:id="balloon"><repr:text>&lt;div style="max-width:400px;*width:400px;"&gt;&lt;strong&gt;$[name]&lt;/strong&gt;&lt;div&gt;$[description]&lt;/div&gt;&lt;/div&gt;</repr:text></repr:Template></repr:Representation><ym:GeoObjectCollection><gml:description><![CDATA[]]></gml:description><gml:name><![CDATA[Новые кинотеатры Нижнего Новгорода]]></gml:name><gml:featureMembers><ym:GeoObject><gml:metaDataProperty><ym:AnyMetaData><ym:number>1</ym:number></ym:AnyMetaData></gml:metaDataProperty><gml:description><![CDATA[Московское шоссе, 12
+
+Телефон: (831) 211-27-27
+
+Телефон: (831) 211-27-57
+
+http://www.cinemastar.ru/]]></gml:description><gml:name><![CDATA[Синема Стар Рио]]></gml:name><gml:Point><gml:pos>43.92544 56.317969</gml:pos></gml:Point><ym:style>default#pinkPoint</ym:style></ym:GeoObject><ym:GeoObject><gml:metaDataProperty><ym:AnyMetaData><ym:number>2</ym:number></ym:AnyMetaData></gml:metaDataProperty><gml:description><![CDATA[ул. Бетанкура 1
+
+Телефон: 8-800-700-01-11
+
+Веб-сайт: http://www.cinemapark.ru]]></gml:description><gml:name><![CDATA[Синема Парк DeLuxe IMAX]]></gml:name><gml:Point><gml:pos>43.954772 56.338445</gml:pos></gml:Point><ym:style>default#violetPoint</ym:style></ym:GeoObject><ym:GeoObject><gml:metaDataProperty><ym:AnyMetaData><ym:number>3</ym:number></ym:AnyMetaData></gml:metaDataProperty><gml:description><![CDATA[Телефон: 8-800-700-27-52
+
+Телефон: (831) 220-07-52
+
+Веб-сайт: http://www.ig.nnov.ru]]></gml:description><gml:name><![CDATA[Империя Грёз Индиго]]></gml:name><gml:Point><gml:pos>44.074094 56.289047</gml:pos></gml:Point><ym:style>default#redPoint</ym:style></ym:GeoObject></gml:featureMembers><ym:style>#userobject</ym:style></ym:GeoObjectCollection></ym:ymaps>

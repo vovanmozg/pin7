@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Примеры. Загрузка XML.</title>
+    <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"
+            type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
+    <script type="text/javascript">
+
+        ymaps.ready(init);
+
+        function init() {
+            var myMap = new ymaps.Map("map", {
+                center: [59.87, 30.31],
+                zoom: 12,
+                controls: ['zoomControl']
+            }, {
+                searchControlProvider: 'yandex#search'
+            });
+
+
+            points = [
+                //POINTS,
+                'Санкт-Петербург Московский р-н Витебский пр-кт, д.49',
+                'Санкт-Петербург Московский р-н, ул.Благодатная, д.35'
+            ]
+
+
+            for(i in points) {
+                point = points[i];
+                ymaps.geocode(point, {results: 1}).then(function (res) {
+                    myMap.geoObjects.add(res.geoObjects.get(0));
+                });
+            }
+
+
+        }
+
+
+    </script>
+</head>
+<body>
+<div id="map" style="width: 100%; height: 100%"></div>
+</body>
+</html>
+<!-- http://webmap-blog.ru/yandex-maps/generiruem-fajl-v-formate-ymapsml-s-dannymi-avtomaticheski-versiya-dlya-api-yandeks-kart-2-x -->
