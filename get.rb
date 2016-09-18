@@ -2,26 +2,21 @@ require 'curb'
 require 'nokogiri'
 require 'dotenv'
 require "#{__dir__}/browser"
-
 Dotenv.load
 # create .env file with vars PIN7_PHPSESSID=xxx and PIN7_PASSWORD=xxx
 
 HOST = 'pin7.ru'
-
+CACHE = 60 * 60
 
 def main
   init
   login
   search
-  # pages
+  pages
 end
 
 def init
   $b = Browser.new
-end
-
-def urltofile(url)
-  url.gsub(/[^a-zA-Z0-9]/, '')[10..50]
 end
 
 #
@@ -41,24 +36,9 @@ end
 # end
 
 def login
-  $b.get("http://#{HOST}/")
-  $b.post("http://#{HOST}/", { fgo: '%C2%F5%EE%E4', fpin: 77777})
-  $b.get("http://#{HOST}/online.php")
-
-  # $c.url = 'http://pin7.ru/'
-  # p $c.http_post(
-  #     Curl::PostField.content('fgo', '%C2%F5%EE%E4'),
-  #     Curl::PostField.content('fpin', ENV['PIN7_PASSWORD'])
-  # )
-
-
-  #
-  # # авторизация
-  # post_page('http://pin7.ru/', {
-  #     fgo: '%C2%F5%EE%E4',
-  #     fpin: 77777}
-  # )
-  # get_page("http://pin7.ru")
+  get "http://#{HOST}/", cache_age: CACHE
+  post "http://#{HOST}/", { fgo: '%C2%F5%EE%E4', fpin: 77777}, cache_age: CACHE
+  get "http://#{HOST}/online.php", cache_age: CACHE
 end
 
 def search
@@ -90,8 +70,27 @@ end
 
 def pages
   (1..6).to_a.each do |p|
-    get_page("http://pin7.ru/search.php?a=1&numpage=#{p}")
+    get "http://pin7.ru/search.php?a=1&numpage=#{p}", cache_age: CACHE
+    sleep 1
   end
 end
 
+def get(url, cache_age: 0)
+  go url, cache_age: cache_age
+end
+
+def post(url, data, cache_age: 0)
+  go url, data: data, cache_age: cache_age
+end
+
+def go(url, data: nil, cache_age: 0)
+  if data
+    body = $b.post url, data, cache_age: cache_age
+  else
+    body = $b.get url, cache_age: cache_age
+  end
+end
+
+
 main
+

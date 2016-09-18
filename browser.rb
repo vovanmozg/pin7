@@ -9,7 +9,14 @@ class Browser
     @jar = HTTP::CookieJar.new
   end
 
-  def get(url)
+  def get(url, cache_age: 0)
+    p "fetching #{url}"
+    cache_id = "g#{url}"
+    if cache = cache_get(cache_id, age: cache_age)
+      p "using cache"
+      return cache
+    end
+
     uri = URI.parse(url)
     @host = uri.host
     http = Net::HTTP.new @host
@@ -26,6 +33,7 @@ class Browser
       @jar.parse(cookie, "http://#{@host}")
     end
 
+    cache_set cache_id, resp.body
     resp.body
 
     # Output on the screen -> we should get either a 302 redirect (after a successful login) or an error page
@@ -35,7 +43,14 @@ class Browser
     #   puts data
   end
 
-  def post(url, data)
+  def post(url, data, cache_age: 0)
+    p "posting #{url}"
+    cache_id = "p#{url} #{data.to_s}"
+    if cache = cache_get(cache_id, age: cache_age)
+      p "using cache"
+      return cache
+    end
+
     uri = URI.parse(url)
     @host = uri.host
     http = Net::HTTP.new @host
@@ -63,6 +78,31 @@ class Browser
     # puts 'Code = ' + resp.code
     # puts 'Message = ' + resp.message
     # resp.each { |key, val| puts key + ' = ' + val }
+    cache_set cache_id, resp.body
     resp.body
+  end
+
+  private
+
+  def cache_get(id, age: 0)
+    return nil if age == 0
+    cache = "data/cache/#{genfname(id)}.txt"
+    if File.exists? cache
+      if Time.now - File.stat(cache).mtime < age
+        return IO.read cache
+      end
+    end
+  end
+
+  def cache_set(id, data)
+    IO.write "data/cache/#{genfname(id)}.txt", data
+  end
+
+  def genfname(url)
+    fname = url.gsub(/[^a-zA-Z0-9]/, '')[0..50]
+    # if fname.length > 50
+    #   fname = fname[10..50]
+    # end
+    # fname
   end
 end
