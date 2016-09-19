@@ -12,23 +12,14 @@ def main
   init
   login
   search
-  pages
+  flats = pages
+  template = IO.read 'data/map-template.htm'
+  IO.write 'data/map.htm', template.gsub(/POINTS/, flats.map{|f| "'#{f}'"}.join(','))
 end
 
 def init
   $b = Browser.new
 end
-
-#
-# def post_page(url, post)
-#
-#
-#   # http = Curl.post(url, post) do |http|
-#   #   http.headers['Cookie'] = "PHPSESSID=#{ENV['PIN7_PHPSESSID']}"
-#   # end
-#   #
-#   # IO.write "data/#{urltofile "#{url}#{post}"}.htm", http.body_str
-# end
 
 # def get_page(url)
 #   http = Curl.post(url)
@@ -37,13 +28,12 @@ end
 
 def login
   get "http://#{HOST}/", cache_age: CACHE
-  post "http://#{HOST}/", { fgo: '%C2%F5%EE%E4', fpin: 77777}, cache_age: CACHE
+  post "http://#{HOST}/", {fgo: '%C2%F5%EE%E4', fpin: 77777}, cache_age: CACHE
   get "http://#{HOST}/online.php", cache_age: CACHE
 end
 
 def search
-
-  d = $b.post("http://#{HOST}/search.php",  {
+  d = $b.post("http://#{HOST}/search.php", {
       sposob: 1,
       region: 1,
       tip_poiska: 2,
@@ -63,16 +53,34 @@ def search
       SearchGO: '%C8%F1%EA%E0%F2%FC',
       var_number: ''
   })
-
   IO.write 'data/temp.htm', d
-
 end
 
 def pages
+  flats = []
   (1..6).to_a.each do |p|
-    get "http://pin7.ru/search.php?a=1&numpage=#{p}", cache_age: CACHE
+    content = get "http://pin7.ru/search.php?a=1&numpage=#{p}", cache_age: 0
+    content.force_encoding("cp1251").encode("utf-8", undef: :replace)
+    doc = Nokogiri::HTML content
+    doc.css('table.tbm_01 tr').each do |row|
+      address = ''
+      address_td = row.css('.tdm_02')
+      # Если контентная строка, а не заголовок
+      if address_td.count > 0
+        # убрать ссылки на карту
+        address_td.at_css('table').content = ''
+        additional_address_em = address_td.at_css('em')
+        additional_address = ''
+        if additional_address_em
+          additional_address = additional_address_em.text
+          additional_address_em.content = ''
+        end
+        flats << "#{address_td.text.split.join(' ')} #{additional_address}"
+      end
+    end
     sleep 1
   end
+  return flats
 end
 
 def get(url, cache_age: 0)

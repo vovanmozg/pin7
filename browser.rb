@@ -25,8 +25,8 @@ class Browser
     headers = {
         'Cookie' => HTTP::Cookie.cookie_value(@jar.cookies("http://#{@host}"))
     }
-
-    resp = http.get2(path, headers)
+    p ">>> #{path}"
+    resp = http.get2("#{path}?#{uri.query}", headers)
     if resp.response['set-cookie']
       cookie = resp.response['set-cookie'].split('; ')[0]
       #@cookie = cookie # only one kuka
@@ -86,7 +86,7 @@ class Browser
 
   def cache_get(id, age: 0)
     return nil if age == 0
-    cache = "data/cache/#{genfname(id)}.txt"
+    cache = "data/cache/#{genfname(id)}.htm"
     if File.exists? cache
       if Time.now - File.stat(cache).mtime < age
         return IO.read cache
@@ -95,7 +95,7 @@ class Browser
   end
 
   def cache_set(id, data)
-    IO.write "data/cache/#{genfname(id)}.txt", data
+    IO.write "data/cache/#{genfname(id)}.htm", data
   end
 
   def genfname(url)

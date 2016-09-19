@@ -39,7 +39,29 @@
             for(i in points) {
                 point = points[i];
                 ymaps.geocode(point, {results: 1}).then(function (res) {
-                    myMap.geoObjects.add(res.geoObjects.get(0));
+
+                    myPlacemark = res.geoObjects.get(0);
+
+                    // Не удалось сменить иконку приоложения
+                    /*
+                    myPlacemark.properties.set({
+                        iconLayout: 'default#image',
+                        // Своё изображение иконки метки.
+                        iconImageHref: 'http://www.htmlcsscolor.com/preview/16x16/000000.png',
+                        // Размеры метки.
+                        iconImageSize: [30, 42],
+                        // Смещение левого верхнего угла иконки относительно
+                        // её "ножки" (точки привязки).
+                        iconImageOffset: [-3, -42]
+
+                    });
+                    myPlacemark.properties.set('iconLayout','default#image');
+                    myPlacemark.properties.set('iconImageHref','http://www.htmlcsscolor.com/preview/16x16/000000.png');
+                    myPlacemark.properties.set('iconImageSize',[30, 42]);
+                    myPlacemark.properties.set('iconImageOffset',[-3, -42]);
+                    */
+
+                    myMap.geoObjects.add(myPlacemark);
                 });
             }
 
